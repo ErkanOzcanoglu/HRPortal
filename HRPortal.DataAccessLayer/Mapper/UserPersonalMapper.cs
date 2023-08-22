@@ -30,13 +30,11 @@ namespace HRPortal.DataAccessLayer.Mapper {
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => System.Guid.NewGuid()))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
-                .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
+                .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.Email));
 
         }
 
         public void Configure(EntityTypeBuilder<UserPersonalInfo> builder) {
-            builder.Ignore(c => c.Password);
             builder.Ignore(c => c.PhoneNumber);
             builder.Ignore(c => c.SocialSecurityNumber);
             builder.Ignore(c => c.DateOfBirth);

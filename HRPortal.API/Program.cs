@@ -41,7 +41,9 @@ namespace HRPortal.API {
 
             app.UseRouting();
 
-            app.MapControllers();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
 
             app.Run();
         }
