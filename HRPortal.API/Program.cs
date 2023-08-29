@@ -1,4 +1,3 @@
-using HRPortal.DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRPortal.API {
@@ -12,7 +11,9 @@ namespace HRPortal.API {
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<HRPortalContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRPortalContext")));
+            //builder.Services.AddDbContext<HRPortalContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HRPortalContext")));
+            // for postgresql
+            //builder.Services.AddDbContext<HRPortalContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("HRPortalContext")));
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddCors(options => {
