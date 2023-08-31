@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Dto\InComing\" />
+    <Folder Include="Dto\OutComing\" />
+  </ItemGroup>
+
 </Project>
