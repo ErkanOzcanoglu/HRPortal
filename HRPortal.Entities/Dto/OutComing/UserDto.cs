@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Models {
-    public class User : BaseModel {
-
+namespace HRPortal.Entities.Dto.OutComing {
+    public class UserDto : BaseDto {
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -111,71 +109,5 @@ namespace HRPortal.Entities.Models {
         /// The authority.
         /// </value>
         public string Authority { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password hash.
-        /// </summary>
-        /// <value>
-        /// The password hash.
-        /// </value>
-        public byte[] PasswordHash { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password salt.
-        /// </summary>
-        /// <value>
-        /// The password salt.
-        /// </value>
-        public byte[] PasswordSalt { get; set; }
-
-        // Relationships
-
-        /// <summary>
-        /// Gets or sets the projects.
-        /// </summary>
-        /// <value>
-        /// The projects.
-        /// </value>
-        public ICollection<Project> Projects { get; set; }
-
-        /// <summary>
-        /// Gets or sets the company identifier.
-        /// </summary>
-        /// <value>
-        /// The company identifier.
-        /// </value>
-        public Guid CompanyId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the company.
-        /// </summary>
-        /// <value>
-        /// The company.
-        /// </value>
-        public Company Company { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tasks.
-        /// </summary>
-        /// <value>
-        /// The tasks.
-        /// </value>
-        public ICollection<Tasks> Tasks { get; set; }
-
-        /// <summary>
-        /// Gets or sets the events.
-        /// </summary>
-        /// <value>
-        /// The events.
-        /// </value>
-        public ICollection<Event> Events { get; set; }
-
-        /// <summary>
-        /// Gets or sets the budgets.
-        /// </summary>
-        /// <value>
-        /// The budgets.
-        /// </value>
-        public ICollection<Budget> Budgets { get; set; }
     }
 }

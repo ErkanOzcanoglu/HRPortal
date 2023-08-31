@@ -6,27 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HRPortal.Entities.IRepositories {
-    public interface IRepository<T> where T: BaseModel {
+    public interface IRepository<T, TDto, TCreate> where T: BaseModel {
 
         /// <summary>
         /// Gets all asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<TDto>> GetAllAsync();
 
         /// <summary>
         /// Gets the asynchronous.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task<T> GetAsync(int id);
+        Task<T> GetAsync(Guid id);
 
         /// <summary>
         /// Creates the specified entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        Task Create(T entity);
+        Task Create(TCreate entity);
 
         /// <summary>
         /// Updates the specified identifier.
@@ -34,14 +34,14 @@ namespace HRPortal.Entities.IRepositories {
         /// <param name="id">The identifier.</param>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        Task Update(Guid id, T entity);
+        Task Update(Guid id, TDto entity);
 
         /// <summary>
         /// Deletes the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task Delete(int id);
+        Task Delete(Guid id);
 
     }
 }
