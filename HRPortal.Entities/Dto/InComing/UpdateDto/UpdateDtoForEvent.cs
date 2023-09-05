@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Dto.InComing {
-    public class CreationDtoForEvent : BaseDto {
+namespace HRPortal.Entities.Dto.InComing.CreationDto
+{
+    public class UpdateDtoForEvent : BaseDto
+    {
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

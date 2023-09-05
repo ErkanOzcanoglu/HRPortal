@@ -1,4 +1,5 @@
 ﻿using HRPortal.Entities.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HRPortal.Entities.IRepositories {
-    public interface IRepository<T, TDto, TCreate> where T: BaseModel {
+    public interface IRepository<T, TDto, TCreate, TUpdate> where T: BaseModel {
 
         /// <summary>
         /// Gets all asynchronous.
@@ -26,7 +27,7 @@ namespace HRPortal.Entities.IRepositories {
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        Task Create(TCreate entity);
+        Task<ActionResult<string>> Create(TCreate entity);
 
         /// <summary>
         /// Updates the specified identifier.
@@ -34,14 +35,14 @@ namespace HRPortal.Entities.IRepositories {
         /// <param name="id">The identifier.</param>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        Task Update(Guid id, TDto entity);
+        Task<ActionResult<string>> Update(Guid id, TUpdate entity);
 
         /// <summary>
         /// Deletes the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task Delete(Guid id);
+        Task<ActionResult<string>> Delete(Guid id);
 
     }
 }

@@ -31,8 +31,14 @@ namespace HRPortal.DataAccessLayer.Repositories {
             var user = new User {
                 Name = userForRegisterDto.Name,
                 Surname = userForRegisterDto.Surname,
+                Mail = userForRegisterDto.Email,
+                Phone = userForRegisterDto.Phone,
+                TC = userForRegisterDto.TC,
+                Title = userForRegisterDto.Title,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                CompanyId = userForRegisterDto.CompanyGuid,
+                VerificationToken = CreateRandomToken()
             };
 
             await _dbSet.AddAsync(user);
@@ -50,6 +56,10 @@ namespace HRPortal.DataAccessLayer.Repositories {
 
             return CreatedToken(nameEntity);
 
+        }
+
+        private string CreateRandomToken() {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
 
         private string CreatedToken(User user) {

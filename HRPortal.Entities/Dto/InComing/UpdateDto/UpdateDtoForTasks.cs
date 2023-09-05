@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Dto.InComing {
-    public class CreationDtoForTasks : BaseDto {
+namespace HRPortal.Entities.Dto.InComing.UpdateDto {
+    public class UpdateDtoForTasks : BaseDto
+    {
         /// <summary>
         /// Gets or sets the name of the task.
         /// </summary>

@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Dto.InComing {
-    public class CreationDtoForProject : BaseDto {
+namespace HRPortal.Entities.Dto.InComing.UpdateDto {
+    public class UpdateDtoForProject : BaseDto
+    {
 
         /// <summary>
         /// Gets or sets the name.

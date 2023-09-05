@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Dto.InComing {
-    public class CreationDtoForCreditCard : BaseDto {
+namespace HRPortal.Entities.Dto.InComing.CreationDto
+{
+    public class CreationDtoForCreditCard : BaseDto
+    {
         /// <summary>
         /// Gets or sets the card number.
         /// </summary>
@@ -46,5 +48,6 @@ namespace HRPortal.Entities.Dto.InComing {
         /// The expiration date.
         /// </value>
         public string ExpirationDate { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }

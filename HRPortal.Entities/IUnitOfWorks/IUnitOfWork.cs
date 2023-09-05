@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HRPortal.Entities.IUnitOfWorks {
-    public interface IUnitOfWork<T, TDto, TCreate> where T: BaseModel {
+    public interface IUnitOfWork<T, TDto, TCreate, TUpdate> where T: BaseModel {
 
         /// <summary>
         /// Gets the repository.
@@ -15,7 +15,7 @@ namespace HRPortal.Entities.IUnitOfWorks {
         /// <value>
         /// The repository.
         /// </value>
-        IRepository<T, TDto, TCreate> Repository { get; }
+        IRepository<T, TDto, TCreate, TUpdate> Repository { get; }
 
         /// <summary>
         /// Saves the changes.

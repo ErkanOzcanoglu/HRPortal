@@ -12,85 +12,52 @@ using Microsoft.Identity.Client;
 namespace HRPortal.API.Controller {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenericController<T, TDto, TCreate> : ControllerBase, IRepository<T, TDto, TCreate> where T: BaseModel{
-
-        /// <summary>
-        /// The context
-        /// </summary>
+    public class GenericController<T, TDto, TCreate, TUpdate> : ControllerBase, IRepository<T, TDto, TCreate, TUpdate> where T: BaseModel{
         private readonly HRPortalContext _context;
-
-        /// <summary>
-        /// The unit of work
-        /// </summary>
-        private readonly IUnitOfWork<T, TDto, TCreate> _unitOfWork;
-
-        /// <summary>
-        /// The mapper
-        /// </summary>
+        private readonly IUnitOfWork<T, TDto, TCreate, TUpdate> _unitOfWork;
         private readonly IMapper _mapper;
-
-        /// <summary>
-        /// The database set
-        /// </summary>
         private readonly DbSet<T> _dbSet;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenericController{T}"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="mapper">The mapper.</param>
         public GenericController(HRPortalContext context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
             _dbSet = context.Set<T>();
-            _unitOfWork = new UnitOfWork<T, TDto, TCreate>(_context, mapper);
+            _unitOfWork = new UnitOfWork<T, TDto, TCreate, TUpdate>(_context, mapper);
         }
 
-        /// <summary>
-        /// Creates the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         [HttpPost]
-        public async Task Create(TCreate entity) {
-            await _unitOfWork.Repository.Create(entity);
-            _context.SaveChanges();
+        public async Task<ActionResult<string>> Create(TCreate entity) {
+            try {
+                await _unitOfWork.Repository.Create(entity);
+                _unitOfWork.SaveChanges();
+                return Ok("Creation Complete"); 
+            } catch (Exception ex) {
+                return Ok("Creation Incomplete");
+            }
         }
 
-        /// <summary>
-        /// Deletes the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
         [HttpDelete("{id}")]
-        public async Task Delete(Guid id) {
+        public async Task<ActionResult<string>> Delete(Guid id) {
             await _unitOfWork.Repository.Delete(id);
-            _context.SaveChanges();
+            _unitOfWork.SaveChanges();
+            return Ok("Deletion Complete");
         }
 
-        /// <summary>
-        /// Gets all asynchronous.
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public async Task<IEnumerable<TDto>> GetAllAsync() {
             return await _unitOfWork.Repository.GetAllAsync();
         }
 
-        /// <summary>
-        /// Gets the asynchronous.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<T> GetAsync(Guid id) {
             return await _unitOfWork.Repository.GetAsync(id);
         }
 
         [HttpPut("{id}")]
-        public async Task Update(Guid id, TDto entity) {
+        public async Task<ActionResult<string>> Update(Guid id, TUpdate entity) {
             await _unitOfWork.Repository.Update(id, entity);
-            _context.SaveChanges();
+            _unitOfWork.SaveChanges();
+            return Ok("Update Complete");
         }
     }
 }

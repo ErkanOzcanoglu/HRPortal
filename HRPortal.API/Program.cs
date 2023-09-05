@@ -1,4 +1,5 @@
 using HRPortal.DataAccessLayer.Context;
+using HRPortal.Services.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRPortal.API {
@@ -18,6 +19,8 @@ namespace HRPortal.API {
             // for postgresql
             //builder.Services.AddDbContext<HRPortalContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("HRPortalContext")));
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddCors(options => {
                 options.AddPolicy("AllowSpecificOrigin",

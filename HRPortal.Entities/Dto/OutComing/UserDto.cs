@@ -103,11 +103,14 @@ namespace HRPortal.Entities.Dto.OutComing {
         public float LeaveDay { get; set; }
 
         /// <summary>
-        /// Gets or sets the authority.
+        /// Gets or sets a value indicating whether this instance is admin.
         /// </summary>
         /// <value>
-        /// The authority.
+        ///   <c>true</c> if this instance is admin; otherwise, <c>false</c>.
         /// </value>
-        public string Authority { get; set; }
+        public bool IsAdmin { get; set; }
+
+        public Guid CompanyId { get; set; }
+
     }
 }

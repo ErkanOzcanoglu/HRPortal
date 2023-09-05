@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using HRPortal.DataAccessLayer.Context;
 using HRPortal.DataAccessLayer.UnitOfWorks;
-using HRPortal.Entities.Dto.InComing;
+using HRPortal.Entities.Dto.InComing.CreationDto;
+using HRPortal.Entities.Dto.InComing.UpdateDto;
 using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.IUnitOfWorks;
 using HRPortal.Entities.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace HRPortal.API.Controller {
-    public class CreditCardController : GenericController<CreditCard, CreditCardDto, CreationDtoForCreditCard> {
+namespace HRPortal.API.Controller
+{
+    public class CreditCardController : GenericController<CreditCard, CreditCardDto, CreationDtoForCreditCard, UpdateDtoForCreditCard> {
 
         /// <summary>
         /// The context
@@ -18,7 +21,7 @@ namespace HRPortal.API.Controller {
         /// <summary>
         /// The unit of work
         /// </summary>
-        private readonly IUnitOfWork<CreditCard, CreditCardDto, CreationDtoForCreditCard> _unitOfWork;
+        private readonly IUnitOfWork<CreditCard, CreditCardDto, CreationDtoForCreditCard, UpdateDtoForCreditCard> _unitOfWork;
 
         /// <summary>
         /// The mapper
@@ -39,7 +42,17 @@ namespace HRPortal.API.Controller {
             _context = context;
             _mapper = mapper;
             _dbSet = context.Set<CreditCard>();
-            _unitOfWork = new UnitOfWork<CreditCard, CreditCardDto, CreationDtoForCreditCard>(_context, mapper);
+            _unitOfWork = new UnitOfWork<CreditCard, CreditCardDto, CreationDtoForCreditCard, UpdateDtoForCreditCard>(_context, mapper);
+        }
+
+        // create credit card with company id
+        [HttpPost("{id}")]
+        public IActionResult CreateCreditCard(Guid id, [FromBody] CreationDtoForCreditCard creationDtoForCreditCard) {
+            var creditCard = _mapper.Map<CreditCard>(creationDtoForCreditCard);
+            creditCard.CompanyId = id;
+            _dbSet.Add(creditCard);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }

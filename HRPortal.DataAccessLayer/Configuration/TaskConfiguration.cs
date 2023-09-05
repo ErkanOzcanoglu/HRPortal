@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using HRPortal.Entities.Dto.InComing;
+using HRPortal.Entities.Dto.InComing.CreationDto;
+using HRPortal.Entities.Dto.InComing.UpdateDto;
 using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,37 +11,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.DataAccessLayer.Configuration {
+namespace HRPortal.DataAccessLayer.Configuration
+{
     public class TaskConfiguration : Profile {
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TaskConfiguration"/> class.
-        /// </summary>
         public TaskConfiguration() {
             CreateMap<CreationDtoForTasks, Tasks>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
-                .ForMember(dest => dest.TaskDescription, opt => opt.MapFrom(src => src.TaskDescription))
-                .ForMember(dest => dest.TaskDuration, opt => opt.MapFrom(src => src.TaskDuration))
-                .ForMember(dest => dest.TaskEndDate, opt => opt.MapFrom(src => src.TaskEndDate))
-                .ForMember(dest => dest.TaskName, opt => opt.MapFrom(src => src.TaskName))
-                .ForMember(dest => dest.TaskPriority, opt => opt.MapFrom(src => src.TaskPriority))
-                .ForMember(dest => dest.TaskStartDate, opt => opt.MapFrom(src => src.TaskStartDate))
-                .ForMember(dest => dest.TaskType, opt => opt.MapFrom(src => src.TaskType));
+                .ForMember(b => b.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(b => b.CreatedTime, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(b => b.Status, opt => opt.MapFrom(src => 1))
+                .ForMember(b => b.TaskName, opt => opt.MapFrom(src => src.TaskName))
+                .ForMember(b => b.TaskName, opt => opt.MapFrom(src => src.TaskName))
+                .ForMember(b => b.TaskDescription, opt => opt.MapFrom(src => src.TaskDescription))
+                .ForMember(b => b.TaskPriority, opt => opt.MapFrom(src => src.TaskPriority))
+                .ForMember(b => b.TaskStartDate, opt => opt.MapFrom(src => src.TaskStartDate))
+                .ForMember(b => b.TaskEndDate, opt => opt.MapFrom(src => src.TaskEndDate));
+
 
             CreateMap<Tasks, TasksDto>()
-                .ForMember(dest => dest.TaskDescription, opt => opt.MapFrom(src => src.TaskDescription))
-                .ForMember(dest => dest.TaskDuration, opt => opt.MapFrom(src => src.TaskDuration))
-                .ForMember(dest => dest.TaskEndDate, opt => opt.MapFrom(src => src.TaskEndDate))
-                .ForMember(dest => dest.TaskName, opt => opt.MapFrom(src => src.TaskName))
-                .ForMember(dest => dest.TaskPriority, opt => opt.MapFrom(src => src.TaskPriority))
-                .ForMember(dest => dest.TaskStartDate, opt => opt.MapFrom(src => src.TaskStartDate))
-                .ForMember(dest => dest.TaskType, opt => opt.MapFrom(src => src.TaskType));
+                .ForMember(b => b.Id, opt => opt.MapFrom(b => b.Id))
+                .ForMember(b => b.TaskName, opt => opt.MapFrom(b => b.TaskName))
+                .ForMember(b => b.TaskDescription, opt => opt.MapFrom(b => b.TaskDescription))
+                .ForMember(b => b.TaskPriority, opt => opt.MapFrom(b => b.TaskPriority))
+                .ForMember(b => b.TaskStartDate, opt => opt.MapFrom(b => b.TaskStartDate))
+                .ForMember(b => b.TaskEndDate, opt => opt.MapFrom(b => b.TaskEndDate));
+
+            CreateMap<UpdateDtoForTasks, Tasks>()
+                .ForMember(b => b.TaskName, opt => opt.MapFrom(src => src.TaskName))
+                .ForMember(b => b.TaskDescription, opt => opt.MapFrom(src => src.TaskDescription))
+                .ForMember(b => b.TaskPriority, opt => opt.MapFrom(src => src.TaskPriority))
+                .ForMember(b => b.TaskStartDate, opt => opt.MapFrom(src => src.TaskStartDate))
+                .ForMember(b => b.TaskEndDate, opt => opt.MapFrom(src => src.TaskEndDate));
         }
 
-        /// <summary>
-        /// Configures the specified builder.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<Tasks> builder) {
             builder.HasKey(b => b.Id);
             builder.HasOne(b => b.Project).WithMany(b => b.Tasks).HasForeignKey(b => b.ProjectId).OnDelete(DeleteBehavior.Restrict);

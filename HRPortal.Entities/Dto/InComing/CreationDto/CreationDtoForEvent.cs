@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Dto.InComing
+namespace HRPortal.Entities.Dto.InComing.CreationDto
 {
-    public class CreationDtoForCompany : BaseDto
+    public class CreationDtoForEvent : BaseDto
     {
-        // Company Info
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -19,43 +18,43 @@ namespace HRPortal.Entities.Dto.InComing
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the mail.
+        /// Gets or sets the description.
         /// </summary>
         /// <value>
-        /// The mail.
+        /// The description.
         /// </value>
-        public string Mail { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the logo.
+        /// Gets or sets the location.
         /// </summary>
         /// <value>
-        /// The logo.
+        /// The location.
         /// </value>
-        public string Logo { get; set; }
+        public string Location { get; set; }
 
         /// <summary>
-        /// Gets or sets the phone.
+        /// Gets or sets the type.
         /// </summary>
         /// <value>
-        /// The phone.
+        /// The type.
         /// </value>
-        public string Phone { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the address.
+        /// Gets or sets the start date.
         /// </summary>
         /// <value>
-        /// The address.
+        /// The start date.
         /// </value>
-        public string Address { get; set; }
+        public DateTime StartDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the website.
+        /// Gets or sets the end date.
         /// </summary>
         /// <value>
-        /// The website.
+        /// The end date.
         /// </value>
-        public string Website { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

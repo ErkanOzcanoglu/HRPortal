@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRPortal.Entities.Dto.InComing {
-    public class CreationDtoForBudget : BaseDto {
+namespace HRPortal.Entities.Dto.InComing.UpdateDto {
+    public class UpdateDtoForBudget : BaseDto
+    {
         /// <summary>
         /// Gets or sets the budget description.
         /// </summary>
