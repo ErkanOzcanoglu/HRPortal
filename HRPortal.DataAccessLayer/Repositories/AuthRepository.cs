@@ -1,5 +1,5 @@
 ﻿using HRPortal.DataAccessLayer.Context;
-using HRPortal.Entities.Dto.InComing.DtoForUserPersonalInfo;
+using HRPortal.Entities.Dto.InComing.UserForAuth;
 using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,29 +17,35 @@ using System.Threading.Tasks;
 namespace HRPortal.DataAccessLayer.Repositories {
     public class AuthRepository {
         private readonly HRPortalContext _context;
-        private readonly DbSet<UserPersonalInfo> _dbSet;
+        private readonly DbSet<User> _dbSet;
 
         public AuthRepository(HRPortalContext context) {
             _context = context;
-            _dbSet = _context.Set<UserPersonalInfo>();
+            _dbSet = _context.Set<User>();
         }
 
-public async Task Register(UserForRegisterDto userForRegisterDto) {
+        public async Task Register(RegisterDto userForRegisterDto) {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
 
-            var user = new UserPersonalInfo {
-                FirstName = userForRegisterDto.Name,
-                LastName = userForRegisterDto.Surname,
+            var user = new User {
+                Name = userForRegisterDto.Name,
+                Surname = userForRegisterDto.Surname,
+                Mail = userForRegisterDto.Email,
+                Phone = userForRegisterDto.Phone,
+                TC = userForRegisterDto.TC,
+                Title = userForRegisterDto.Title,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                CompanyId = userForRegisterDto.CompanyGuid,
+                VerificationToken = CreateRandomToken()
             };
 
             await _dbSet.AddAsync(user);
         }
 
-        public async Task<ActionResult<string>> Login(UserAuthDto userDto) {
-            var nameEntity = await _dbSet.FirstOrDefaultAsync(x => x.EmailAddress == userDto.Email);
+        public async Task<ActionResult<string>> Login(AuthDto userDto) {
+            var nameEntity = await _dbSet.FirstOrDefaultAsync(x => x.Mail == userDto.Email);
             if (nameEntity == null) {
                 return new UnauthorizedResult();
             }
@@ -52,14 +58,18 @@ public async Task Register(UserForRegisterDto userForRegisterDto) {
 
         }
 
-        private string CreatedToken(UserPersonalInfo user) {
+        private string CreateRandomToken() {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+        }
+
+        private string CreatedToken(User user) {
 
             //var claims = new[] {
             //    new Claim(ClaimTypes.Name, user.Name)
             //};
 
             var claims = new[] {
-                new Claim(ClaimTypes.Email, user.EmailAddress)
+                new Claim(ClaimTypes.Email, user.Mail)
             };
 
 

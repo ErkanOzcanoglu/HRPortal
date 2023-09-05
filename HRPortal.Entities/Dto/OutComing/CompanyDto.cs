@@ -5,21 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HRPortal.Entities.Dto.OutComing {
-    public class CompanyDto {
-        // Company Info
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string TaxId { get; set; }
-        public string PhoneNumber { get; set; }
-        public string EmailAddress { get; set; }
-        public string Website { get; set; }
+    public class CompanyDto : BaseDto {
+        public string CompanyName { get; set; }
+        public string CompanyMail { get; set; }
         public string Logo { get; set; }
-
-        // Credit Card Info
-        public string CardNumber { get; set; }
-        public string CardHolderName { get; set; }
-        public string CardType { get; set; }
-        public string CardSecurityCode { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public string CompanyPhone { get; set; }
+        public string CompanyAddress { get; set; }
+        public string Website { get; set; }
     }
 }

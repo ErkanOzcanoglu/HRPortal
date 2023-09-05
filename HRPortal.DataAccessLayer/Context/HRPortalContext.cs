@@ -1,4 +1,4 @@
-﻿using HRPortal.DataAccessLayer.Mapper;
+﻿using HRPortal.DataAccessLayer.Configuration;
 using HRPortal.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,24 +10,41 @@ using System.Threading.Tasks;
 namespace HRPortal.DataAccessLayer.Context {
     public class HRPortalContext : DbContext {
         public HRPortalContext(DbContextOptions<HRPortalContext> options) : base(options) { }
-            public HRPortalContext() { }
+        public HRPortalContext() { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            var companyMapper = new CompanyMapper();
-            companyMapper.Configure(modelBuilder.Entity<Company>());
+            var budgetConfiguration = new BudgetConfiguration();
+            budgetConfiguration.Configure(modelBuilder.Entity<Budget>());
 
-            var userCompanyMapper = new UserCompanyMapper();
-            userCompanyMapper.Configure(modelBuilder.Entity<UserCompanyInfo>());
+            var companyConfiguration = new CompanyConfiguration();
+            companyConfiguration.Configure(modelBuilder.Entity<Company>());
 
-            var userPersonalMapper = new UserPersonalMapper();
-            userPersonalMapper.Configure(modelBuilder.Entity<UserPersonalInfo>());
+            var creditCardConfiguration = new CreditCardConfiguration();
+            creditCardConfiguration.Configure(modelBuilder.Entity<CreditCard>());
+
+            var eventConfiguration = new EventConfiguration();
+            eventConfiguration.Configure(modelBuilder.Entity<Event>());
+
+            var projectConfiguration = new ProjectConfiguration();
+            projectConfiguration.Configure(modelBuilder.Entity<Project>());
+
+            var taskConfiguration = new TaskConfiguration();
+            taskConfiguration.Configure(modelBuilder.Entity<Tasks>());
+
+            var userConfiguration = new UserConfiguration();
+            userConfiguration.Configure(modelBuilder.Entity<User>());
         }
 
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<UserCompanyInfo> UserCompanyInfo { get; set; }
-        public DbSet<UserPersonalInfo> UserPersonalInfo { get; set; }
 
+
+        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<CreditCard> CreditCards { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Tasks> Tasks { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
