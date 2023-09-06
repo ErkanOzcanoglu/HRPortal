@@ -1,4 +1,5 @@
-﻿using HRPortal.Entities.Models;
+﻿using HRPortal.Entities.Dto.OutComing;
+using HRPortal.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,11 @@ namespace HRPortal.Entities.IRepositories {
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<ActionResult<string>> Delete(Guid id);
+
+        // get many with same id
+        Task<IEnumerable<UserDto>> GetManyAsync(Guid id);
+
+
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HRPortal.DataAccessLayer.Context;
+using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.IRepositories;
 using HRPortal.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,7 @@ namespace HRPortal.DataAccessLayer.Repositories {
             var entityToGet = await _dbSet.FindAsync(id);
             return entityToGet;
         }
+
         public async Task<ActionResult<string>> Update(Guid id, TUpdate entity) {
             var existingEntity = await _dbSet.FindAsync(id);
 
