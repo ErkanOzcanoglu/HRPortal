@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HRPortal.DataAccessLayer.Context;
 using HRPortal.DataAccessLayer.UnitOfWorks;
+using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.IRepositories;
 using HRPortal.Entities.IUnitOfWorks;
 using HRPortal.Entities.Models;
@@ -51,6 +52,11 @@ namespace HRPortal.API.Controller {
         [HttpGet("{id}")]
         public async Task<T> GetAsync(Guid id) {
             return await _unitOfWork.Repository.GetAsync(id);
+        }
+
+        [HttpGet("asd")]
+        public Task<IEnumerable<UserDto>> GetManyAsync(Guid id) {
+            throw new NotImplementedException();
         }
 
         [HttpPut("{id}")]

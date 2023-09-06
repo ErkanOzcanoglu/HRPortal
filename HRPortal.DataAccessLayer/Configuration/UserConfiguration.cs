@@ -16,6 +16,20 @@ using System.Threading.Tasks;
 namespace HRPortal.DataAccessLayer.Configuration {
     public class UserConfiguration : Profile {
         public UserConfiguration() {
+            CreateMap<CreationDtoForEmployee, User>()
+                .ForMember(u => u.CompanyId, opt => opt.MapFrom(src => src.CompanyId))
+                .ForMember(u => u.IsAdmin, opt => opt.MapFrom(src => src.IsAdmin))
+                .ForMember(u => u.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(u => u.Surname, opt => opt.MapFrom(src => src.Surname))
+                .ForMember(u => u.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(u => u.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(u => u.TC, opt => opt.MapFrom(src => src.TC))
+                .ForMember(u => u.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth))
+                .ForMember(u => u.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(u => u.Department, opt => opt.MapFrom(src => src.Department))
+                .ForMember(u => u.Mail, opt => opt.MapFrom(src => src.Mail))
+                .ForMember(u => u.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
+
             CreateMap<CreationDtoForUser, User>()
                 .ForMember(u => u.IsAdmin, opt => opt.MapFrom(src => true))
                 .ForMember(u => u.CompanyId, opt => opt.MapFrom(src => src.CompanyId));
