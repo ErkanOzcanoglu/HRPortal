@@ -42,6 +42,9 @@ namespace HRPortal.DataAccessLayer.Migrations
                     b.Property<DateTime>("DeletedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
@@ -51,14 +54,11 @@ namespace HRPortal.DataAccessLayer.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EmployeeId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("EventId");
 
                     b.ToTable("Budgets");
                 });
@@ -112,6 +112,39 @@ namespace HRPortal.DataAccessLayer.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("HRPortal.Entities.Models.CompanyWorkers", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("CompanyWorkers");
+                });
+
             modelBuilder.Entity("HRPortal.Entities.Models.CreditCard", b =>
                 {
                     b.Property<Guid>("Id")
@@ -134,7 +167,7 @@ namespace HRPortal.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedTime")
@@ -156,10 +189,136 @@ namespace HRPortal.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId")
-                        .IsUnique()
-                        .HasFilter("[CompanyId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("CreditCards");
+                });
+
+            modelBuilder.Entity("HRPortal.Entities.Models.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DateOfBirth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Mail")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TC")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("VerificationToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Employee");
+                });
+
+            modelBuilder.Entity("HRPortal.Entities.Models.EmployeeCompanyInformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompanyMail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<float>("LeaveDay")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("ModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("Salary")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique()
+                        .HasFilter("[EmployeeId] IS NOT NULL");
+
+                    b.ToTable("EmployeeCompanyInformations");
                 });
 
             modelBuilder.Entity("HRPortal.Entities.Models.Event", b =>
@@ -334,121 +493,72 @@ namespace HRPortal.DataAccessLayer.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("HRPortal.Entities.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DateOfBirth")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Department")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<float>("LeaveDay")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Mail")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("ModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("PasswordResetToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("PasswordResetTokenExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Salary")
-                        .HasColumnType("real");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TC")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VerificationToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("VerifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("HRPortal.Entities.Models.Budget", b =>
                 {
+                    b.HasOne("HRPortal.Entities.Models.Employee", null)
+                        .WithMany("Budgets")
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("HRPortal.Entities.Models.Event", "Event")
                         .WithMany("Budgets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HRPortal.Entities.Models.User", null)
-                        .WithMany("Budgets")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("HRPortal.Entities.Models.CompanyWorkers", b =>
+                {
+                    b.HasOne("HRPortal.Entities.Models.Company", "Company")
+                        .WithMany("CompanyWorkers")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HRPortal.Entities.Models.Employee", "Employee")
+                        .WithMany("CompanyWorkers")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("HRPortal.Entities.Models.CreditCard", b =>
                 {
                     b.HasOne("HRPortal.Entities.Models.Company", "Company")
                         .WithOne("CreditCards")
-                        .HasForeignKey("HRPortal.Entities.Models.CreditCard", "CompanyId");
+                        .HasForeignKey("HRPortal.Entities.Models.CreditCard", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("HRPortal.Entities.Models.Employee", b =>
+                {
+                    b.HasOne("HRPortal.Entities.Models.Company", "Company")
+                        .WithMany("Users")
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("HRPortal.Entities.Models.EmployeeCompanyInformation", b =>
+                {
+                    b.HasOne("HRPortal.Entities.Models.Employee", "Employee")
+                        .WithOne("EmployeeCompanyInformation")
+                        .HasForeignKey("HRPortal.Entities.Models.EmployeeCompanyInformation", "EmployeeId");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("HRPortal.Entities.Models.Event", b =>
                 {
-                    b.HasOne("HRPortal.Entities.Models.User", "Owner")
+                    b.HasOne("HRPortal.Entities.Models.Employee", "Owner")
                         .WithMany("Events")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -463,7 +573,7 @@ namespace HRPortal.DataAccessLayer.Migrations
                         .WithMany("Projects")
                         .HasForeignKey("BudgetId");
 
-                    b.HasOne("HRPortal.Entities.Models.User", "Owner")
+                    b.HasOne("HRPortal.Entities.Models.Employee", "Owner")
                         .WithMany("Projects")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -480,7 +590,7 @@ namespace HRPortal.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("HRPortal.Entities.Models.User", "Owner")
+                    b.HasOne("HRPortal.Entities.Models.Employee", "Owner")
                         .WithMany("Tasks")
                         .HasForeignKey("TaskOwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -491,15 +601,6 @@ namespace HRPortal.DataAccessLayer.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("HRPortal.Entities.Models.User", b =>
-                {
-                    b.HasOne("HRPortal.Entities.Models.Company", "Company")
-                        .WithMany("Users")
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
-                });
-
             modelBuilder.Entity("HRPortal.Entities.Models.Budget", b =>
                 {
                     b.Navigation("Projects");
@@ -507,10 +608,28 @@ namespace HRPortal.DataAccessLayer.Migrations
 
             modelBuilder.Entity("HRPortal.Entities.Models.Company", b =>
                 {
+                    b.Navigation("CompanyWorkers");
+
                     b.Navigation("CreditCards")
                         .IsRequired();
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("HRPortal.Entities.Models.Employee", b =>
+                {
+                    b.Navigation("Budgets");
+
+                    b.Navigation("CompanyWorkers");
+
+                    b.Navigation("EmployeeCompanyInformation")
+                        .IsRequired();
+
+                    b.Navigation("Events");
+
+                    b.Navigation("Projects");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("HRPortal.Entities.Models.Event", b =>
@@ -520,17 +639,6 @@ namespace HRPortal.DataAccessLayer.Migrations
 
             modelBuilder.Entity("HRPortal.Entities.Models.Project", b =>
                 {
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("HRPortal.Entities.Models.User", b =>
-                {
-                    b.Navigation("Budgets");
-
-                    b.Navigation("Events");
-
-                    b.Navigation("Projects");
-
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618

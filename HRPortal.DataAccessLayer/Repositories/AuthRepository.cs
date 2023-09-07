@@ -17,27 +17,25 @@ using System.Threading.Tasks;
 namespace HRPortal.DataAccessLayer.Repositories {
     public class AuthRepository {
         private readonly HRPortalContext _context;
-        private readonly DbSet<User> _dbSet;
+        private readonly DbSet<Employee> _dbSet;
 
         public AuthRepository(HRPortalContext context) {
             _context = context;
-            _dbSet = _context.Set<User>();
+            _dbSet = _context.Set<Employee>();
         }
 
         public async Task Register(RegisterDto userForRegisterDto) {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
 
-            var user = new User {
+            var user = new Employee {
                 Name = userForRegisterDto.Name,
                 Surname = userForRegisterDto.Surname,
                 Mail = userForRegisterDto.Email,
                 Phone = userForRegisterDto.Phone,
                 TC = userForRegisterDto.TC,
-                Title = userForRegisterDto.Title,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                CompanyId = userForRegisterDto.CompanyGuid,
                 VerificationToken = CreateRandomToken()
             };
 
@@ -62,7 +60,7 @@ namespace HRPortal.DataAccessLayer.Repositories {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
 
-        private string CreatedToken(User user) {
+        private string CreatedToken(Employee user) {
 
             //var claims = new[] {
             //    new Claim(ClaimTypes.Name, user.Name)

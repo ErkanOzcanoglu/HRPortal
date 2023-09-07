@@ -55,7 +55,7 @@ namespace HRPortal.API.Controller {
         }
 
         [HttpGet("asd")]
-        public Task<IEnumerable<UserDto>> GetManyAsync(Guid id) {
+        public Task<IEnumerable<EmployeeDto>> GetManyAsync(Guid id) {
             throw new NotImplementedException();
         }
 

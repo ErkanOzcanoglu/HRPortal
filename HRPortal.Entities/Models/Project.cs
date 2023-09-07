@@ -17,7 +17,7 @@ namespace HRPortal.Entities.Models {
 
         // Relationship
         public Guid OwnerId { get; set; }
-        public User Owner { get; set; }
+        public Employee Owner { get; set; }
 
         public ICollection<Tasks> Tasks { get; set; }
     }

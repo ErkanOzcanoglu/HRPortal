@@ -15,7 +15,9 @@ namespace HRPortal.Entities.Models {
         public Boolean IsPremium { get; set; }   
 
         // Relationship
-        public ICollection<User> Users { get; set; }
+        public ICollection<Employee> Users { get; set; }
         public CreditCard CreditCards { get; set; }
+
+        public ICollection<CompanyWorkers> CompanyWorkers { get; set; }
     }
 }

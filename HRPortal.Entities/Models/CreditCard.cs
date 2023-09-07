@@ -15,7 +15,7 @@ namespace HRPortal.Entities.Models {
         public string ExpirationDate { get; set; }
 
         // Relationships
-        public Guid? CompanyId { get; set; }
-        public Company? Company { get; set; }
+        public Guid CompanyId { get; set; }
+        public Company Company { get; set; }
     }
 }

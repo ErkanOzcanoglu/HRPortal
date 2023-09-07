@@ -33,8 +33,14 @@ namespace HRPortal.DataAccessLayer.Context {
             var taskConfiguration = new TaskConfiguration();
             taskConfiguration.Configure(modelBuilder.Entity<Tasks>());
 
-            var userConfiguration = new UserConfiguration();
-            userConfiguration.Configure(modelBuilder.Entity<User>());
+            var employeeConfiguration = new EmployeeConfiguration();
+            employeeConfiguration.Configure(modelBuilder.Entity<Employee>());
+
+            var employeeCompanyInformationConfiguration = new EmployeeCompanyInformationConfiguration();
+            employeeCompanyInformationConfiguration.Configure(modelBuilder.Entity<EmployeeCompanyInformation>());
+
+            var companyWorkersConfiguration = new CompanyWorkersConfiguration();
+            companyWorkersConfiguration.Configure(modelBuilder.Entity<CompanyWorkers>());
         }
 
 
@@ -45,6 +51,8 @@ namespace HRPortal.DataAccessLayer.Context {
         public DbSet<Event> Events { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Tasks> Tasks { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Employee> Employee { get; set; }
+        public DbSet<CompanyWorkers> CompanyWorkers { get; set; }
+        public DbSet<EmployeeCompanyInformation> EmployeeCompanyInformations { get; set; }
     }
 }

@@ -14,12 +14,12 @@ namespace HRPortal.API.Controller {
     [ApiController]
     public class EmailController : ControllerBase {
         private readonly HRPortalContext _context;
-        private readonly DbSet<User> _dbSet;
+        private readonly DbSet<Employee> _dbSet;
         private readonly IEmailService _emailService;
 
         public EmailController(HRPortalContext context, IEmailService emailService) {
             _context = context;
-            _dbSet = _context.Set<User>();
+            _dbSet = _context.Set<Employee>();
             _emailService = emailService;
         }
 

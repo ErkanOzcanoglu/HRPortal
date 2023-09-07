@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace HRPortal.API.Controller {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : GenericController<User, UserDto, CreationDtoForEmployee, UpdateDtoForUser> {
+    public class EmployeeController : GenericController<Employee, EmployeeDto, CreationDtoForEmployee, UpdateDtoForEmployee> {
 
         /// <summary>
         /// The context
@@ -23,7 +23,7 @@ namespace HRPortal.API.Controller {
         /// <summary>
         /// The unit of work
         /// </summary>
-        private readonly IUnitOfWork<User, UserDto, CreationDtoForEmployee, UpdateDtoForUser> _unitOfWork;
+        private readonly IUnitOfWork<Employee, EmployeeDto, CreationDtoForEmployee, UpdateDtoForEmployee> _unitOfWork;
 
         /// <summary>
         /// The mapper
@@ -33,7 +33,7 @@ namespace HRPortal.API.Controller {
         /// <summary>
         /// The database set
         /// </summary>
-        private readonly DbSet<User> _dbSet;
+        private readonly DbSet<Employee> _dbSet;
 
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace HRPortal.API.Controller {
         public EmployeeController(HRPortalContext context, IMapper mapper) : base(context, mapper) {
             _context = context;
             _mapper = mapper;
-            _dbSet = context.Set<User>();
-            _unitOfWork = new UnitOfWork<User, UserDto, CreationDtoForEmployee, UpdateDtoForUser>(_context, mapper);
+            _dbSet = context.Set<Employee>();
+            _unitOfWork = new UnitOfWork<Employee, EmployeeDto, CreationDtoForEmployee, UpdateDtoForEmployee>(_context, mapper);
         }
 
         [HttpPost("EmployeeCreate")]
@@ -65,9 +65,10 @@ namespace HRPortal.API.Controller {
             return Ok("Creation Complete");
         }
 
-        [HttpGet("Employee/{id}")]
-        public async Task<IEnumerable<UserDto>> GetManyAsync(Guid id) { 
-            return await _unitOfWork.Repository.GetManyAsync(id);
-        }
+
+        //[HttpGet("Employee/{id}")]
+        //public async Task<IEnumerable<EmployeeDto>> GetManyAsync(Guid id) { 
+        //    return await _unitOfWork.Repository.GetManyAsync(id);
+        //}
     }
 }

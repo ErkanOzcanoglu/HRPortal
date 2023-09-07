@@ -19,12 +19,12 @@ namespace HRPortal.API.Controllers {
     [ApiController]
     public class AuthController : ControllerBase {
         private readonly HRPortalContext _context;
-        private readonly DbSet<User> _dbSet;
+        private readonly DbSet<Employee> _dbSet;
         private readonly IEmailService _emailService;
 
         public AuthController(HRPortalContext context, IEmailService emailService) {
             _context = context;
-            _dbSet = _context.Set<User>();
+            _dbSet = _context.Set<Employee>();
             _emailService = emailService;
         }
 
@@ -34,16 +34,14 @@ namespace HRPortal.API.Controllers {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
 
-            var user = new User {
+            var user = new Employee {
                 Name = userForRegisterDto.Name,
                 Surname = userForRegisterDto.Surname,
                 Mail = userForRegisterDto.Email,
                 Phone = userForRegisterDto.Phone,
                 TC = userForRegisterDto.TC,
-                Title = userForRegisterDto.Title,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                CompanyId = userForRegisterDto.CompanyGuid,
                 VerificationToken = CreateRandomToken()
             };
 
@@ -109,7 +107,7 @@ namespace HRPortal.API.Controllers {
         }
 
         [HttpPost("forgot-password")]
-        public async Task<ActionResult<User>> ForgotPassword(string email) {
+        public async Task<ActionResult<Employee>> ForgotPassword(string email) {
             var user = await _dbSet.FirstOrDefaultAsync(x => x.Mail == email);
             if (user == null) { 
                 return BadRequest("User not found.");
@@ -124,7 +122,7 @@ namespace HRPortal.API.Controllers {
         }
 
         [HttpPost("reset-password")]
-        public async Task<ActionResult<User>> ChangePassword(ResetPassword request) {
+        public async Task<ActionResult<Employee>> ChangePassword(ResetPassword request) {
             var user = await _dbSet.FirstOrDefaultAsync(x => x.PasswordResetToken == request.Token);
             if (user == null   || user.PasswordResetTokenExpiresAt < DateTime.Now) {
                 return BadRequest("Invalid token.");
@@ -143,7 +141,7 @@ namespace HRPortal.API.Controllers {
 
         }
 
-        private string CreatedToken(User user) {
+        private string CreatedToken(Employee user) {
             var claims = new[] {
                 new Claim(ClaimTypes.Email, user.Mail)
             };

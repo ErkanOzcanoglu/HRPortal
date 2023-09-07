@@ -43,7 +43,7 @@ namespace HRPortal.DataAccessLayer.Migrations
                     CardType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CardSecurityCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExpirationDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -56,11 +56,12 @@ namespace HRPortal.DataAccessLayer.Migrations
                         name: "FK_CreditCards_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Employee",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -72,10 +73,6 @@ namespace HRPortal.DataAccessLayer.Migrations
                     TC = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Department = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Salary = table.Column<float>(type: "real", nullable: false),
-                    LeaveDay = table.Column<float>(type: "real", nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
@@ -90,11 +87,67 @@ namespace HRPortal.DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Employee", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Companies_CompanyId",
+                        name: "FK_Employee_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompanyWorkers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyWorkers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CompanyWorkers_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompanyWorkers_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeCompanyInformations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Department = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salary = table.Column<float>(type: "real", nullable: false),
+                    LeaveDay = table.Column<float>(type: "real", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeCompanyInformations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeCompanyInformations_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
                         principalColumn: "Id");
                 });
 
@@ -119,9 +172,9 @@ namespace HRPortal.DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_Users_OwnerId",
+                        name: "FK_Events_Employee_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "Users",
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -134,7 +187,7 @@ namespace HRPortal.DataAccessLayer.Migrations
                     BudgetDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BudgetAmount = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -144,16 +197,16 @@ namespace HRPortal.DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_Budgets", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Budgets_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Budgets_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Budgets_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -184,9 +237,9 @@ namespace HRPortal.DataAccessLayer.Migrations
                         principalTable: "Budgets",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Projects_Users_OwnerId",
+                        name: "FK_Projects_Employee_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "Users",
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -214,18 +267,23 @@ namespace HRPortal.DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Tasks_Employee_TaskOwnerId",
+                        column: x => x.TaskOwnerId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Tasks_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Users_TaskOwnerId",
-                        column: x => x.TaskOwnerId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Budgets_EmployeeId",
+                table: "Budgets",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Budgets_EventId",
@@ -233,16 +291,32 @@ namespace HRPortal.DataAccessLayer.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Budgets_UserId",
-                table: "Budgets",
-                column: "UserId");
+                name: "IX_CompanyWorkers_CompanyId",
+                table: "CompanyWorkers",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyWorkers_EmployeeId",
+                table: "CompanyWorkers",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CreditCards_CompanyId",
                 table: "CreditCards",
                 column: "CompanyId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employee_CompanyId",
+                table: "Employee",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeCompanyInformations_EmployeeId",
+                table: "EmployeeCompanyInformations",
+                column: "EmployeeId",
                 unique: true,
-                filter: "[CompanyId] IS NOT NULL");
+                filter: "[EmployeeId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OwnerId",
@@ -268,18 +342,19 @@ namespace HRPortal.DataAccessLayer.Migrations
                 name: "IX_Tasks_TaskOwnerId",
                 table: "Tasks",
                 column: "TaskOwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_CompanyId",
-                table: "Users",
-                column: "CompanyId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CompanyWorkers");
+
+            migrationBuilder.DropTable(
                 name: "CreditCards");
+
+            migrationBuilder.DropTable(
+                name: "EmployeeCompanyInformations");
 
             migrationBuilder.DropTable(
                 name: "Tasks");
@@ -294,7 +369,7 @@ namespace HRPortal.DataAccessLayer.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Employee");
 
             migrationBuilder.DropTable(
                 name: "Companies");

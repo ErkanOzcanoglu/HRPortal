@@ -14,7 +14,7 @@ namespace HRPortal.API.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : GenericController<User, UserDto, CreationDtoForUser, UpdateDtoForUser> {
+    public class UserController : GenericController<Employee, EmployeeDto, CreationDtoForUser, UpdateDtoForEmployee> {
 
         /// <summary>
         /// The context
@@ -24,7 +24,7 @@ namespace HRPortal.API.Controller
         /// <summary>
         /// The unit of work
         /// </summary>
-        private readonly IUnitOfWork<User, UserDto, CreationDtoForUser, UpdateDtoForUser> _unitOfWork;
+        private readonly IUnitOfWork<Employee, EmployeeDto, CreationDtoForUser, UpdateDtoForEmployee> _unitOfWork;
 
         /// <summary>
         /// The mapper
@@ -34,7 +34,7 @@ namespace HRPortal.API.Controller
         /// <summary>
         /// The database set
         /// </summary>
-        private readonly DbSet<User> _dbSet;
+        private readonly DbSet<Employee> _dbSet;
 
 
         /// <summary>
@@ -45,8 +45,8 @@ namespace HRPortal.API.Controller
         public UserController(HRPortalContext context, IMapper mapper) : base(context, mapper) {
             _context = context;
             _mapper = mapper;
-            _dbSet = context.Set<User>();
-            _unitOfWork = new UnitOfWork<User, UserDto, CreationDtoForUser, UpdateDtoForUser>(_context, mapper);
+            _dbSet = context.Set<Employee>();
+            _unitOfWork = new UnitOfWork<Employee, EmployeeDto, CreationDtoForUser, UpdateDtoForEmployee>(_context, mapper);
         }
 
         // getuserbymail

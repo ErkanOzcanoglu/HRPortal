@@ -21,6 +21,6 @@ namespace HRPortal.Entities.Models {
         public Project Project { get; set; }
 
         public Guid TaskOwnerId { get; set; }
-        public User Owner { get; set; }
+        public Employee Owner { get; set; }
     }
 }

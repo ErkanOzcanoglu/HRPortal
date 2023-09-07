@@ -44,11 +44,5 @@ namespace HRPortal.Entities.IRepositories {
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<ActionResult<string>> Delete(Guid id);
-
-        // get many with same id
-        Task<IEnumerable<UserDto>> GetManyAsync(Guid id);
-
-
-
     }
 }
