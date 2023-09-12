@@ -28,7 +28,7 @@ namespace HRPortal.Entities.IRepositories {
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        Task<ActionResult<string>> Create(TCreate entity);
+        Task<ActionResult<TDto>> Create(TCreate entity);
 
         /// <summary>
         /// Updates the specified identifier.

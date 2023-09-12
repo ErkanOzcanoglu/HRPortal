@@ -7,103 +7,92 @@ using HRPortal.Entities.Dto.InComing.UpdateDto;
 using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.IUnitOfWorks;
 using HRPortal.Entities.Models;
+using HRPortal.Services.CacheServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace HRPortal.API.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : GenericController<Company, CompanyDto, CreationDtoForCompany,  UpdateDtoForCompany> {
-
-        /// <summary>
-        /// The context
-        /// </summary>
+    public class CompanyController : ControllerBase {
         private readonly HRPortalContext _context;
-
-        /// <summary>
-        /// The unit of work
-        /// </summary>
         private readonly IUnitOfWork<Company, CompanyDto, CreationDtoForCompany, UpdateDtoForCompany> _unitOfWork;
-
-        /// <summary>
-        /// The mapper
-        /// </summary>
         private readonly IMapper _mapper;
-
-        /// <summary>
-        /// The database set
-        /// </summary>
         private readonly DbSet<Company> _dbSet;
+        private readonly ICacheService _cacheService;
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompanyController"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="mapper">The mapper.</param>
-        public CompanyController(HRPortalContext context, IMapper mapper) : base(context, mapper) {
+        public CompanyController(HRPortalContext context, IMapper mapper, ICacheService cacheService) {
             _context = context;
             _mapper = mapper;
             _dbSet = context.Set<Company>();
+            _cacheService = cacheService;
             _unitOfWork = new UnitOfWork<Company, CompanyDto, CreationDtoForCompany, UpdateDtoForCompany>(_context, mapper);
         }
 
-        // getcompanybymail
-        [HttpGet("GetCompanyByMail")]
-        public IActionResult GetCompanyByMail(string mail) {
-            var company = _dbSet.FirstOrDefault(x => x.CompanyMail == mail);
-            if (company == null) {
-                return NotFound();
+        [HttpGet("companies")]
+        public async Task<IEnumerable<CompanyDto>> GetAllAsync() {
+            //return await _unitOfWork.Repository.GetAllAsync();
+            var cacheData = _cacheService.GetData<IEnumerable<CompanyDto>>("companies");
+            if (cacheData != null && cacheData.Count() > 0) {
+                return cacheData;
             }
-            return Ok(company);
+            cacheData = await _unitOfWork.Repository.GetAllAsync();
+
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<IEnumerable<CompanyDto>>("companies", cacheData, expiryTime);
+            return cacheData;
         }
 
-        [HttpGet("GetCompanyByName")]
-        public IActionResult GetCompanyByName(string name) {
-            var company = _dbSet.FirstOrDefault(x => x.CompanyName == name);
-            if (company == null) {
+        [HttpGet("company/{id}")]
+        public async Task<ActionResult<Company>> GetAsync(Guid id) {
+            var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null) {
                 return NotFound();
             }
-            return Ok(company);
+            var dto = _mapper.Map<CompanyDto>(entity);
+            return Ok(dto);
         }
 
-        [HttpPost("company")]
-        public async Task<ActionResult<string>> Create(CreationDtoForCompany entity) {
-            // check if there is any company with the same mail
-            var companyMail = _dbSet.FirstOrDefault(x => x.CompanyMail == entity.CompanyMail);
-            if (companyMail != null) {
-                return Ok("There is already a company with the same mail");
+        [HttpPost("postCompany")]
+        // post and return company
+        public async Task<ActionResult<CompanyDto>> PostAsync(CreationDtoForCompany creationDtoForCompany) {
+            var cacheData = _cacheService.GetData<ActionResult<CompanyDto>>("postCompany");
+            if (cacheData != null) {
+                return cacheData;
             }
-
-            var companyName = _dbSet.FirstOrDefault(x => x.CompanyName == entity.CompanyName);
-            if (companyName != null) {
-                return Ok("There is already a company with the same name");
-            }
-
-            var companyPhone = _dbSet.FirstOrDefault(x => x.CompanyPhone == entity.CompanyPhone);
-            if (companyPhone != null) {
-                return Ok("There is already a company with the same phone");
-            }
-
-            await _unitOfWork.Repository.Create(entity);
+            cacheData = await _unitOfWork.Repository.Create(creationDtoForCompany);
             _unitOfWork.SaveChanges();
-            return Ok("Creation Complete");
-
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<ActionResult<CompanyDto>>("postCompany", cacheData, expiryTime);
+            return cacheData;
         }
 
-        [HttpPut("premiumUpdate/{id}")]
-        public async Task<ActionResult<string>> UpdatePremium(Guid id) {
-            var company = _dbSet.FirstOrDefault(x => x.Id == id);
-            if (company == null) {
-                return NotFound();
+        [HttpPut("updateCompany/{id}")]
+        public async Task<ActionResult<string>> Update(Guid id, UpdateDtoForCompany updateDtoForEmployee) {
+            var cacheData = _cacheService.GetData<ActionResult<string>>("updateCompany");
+            if (cacheData != null) {
+                return cacheData;
             }
+            cacheData = await _unitOfWork.Repository.Update(id, updateDtoForEmployee);
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<ActionResult<string>>("updateCompany", cacheData, expiryTime);
+            return cacheData;
+        }
 
-            company.IsPremium = true;
-            _dbSet.Update(company);
-            await _context.SaveChangesAsync();
-            return Ok("Update Complete");
+        [HttpDelete("deleteCompany/{id}")]
+        public async Task<ActionResult<string>> Delete(Guid id) {
+            var cacheData = _cacheService.GetData<ActionResult<string>>("deleteCompany");
+            if (cacheData != null) {
+                return cacheData;
+            }
+            cacheData = await _unitOfWork.Repository.Delete(id);
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<ActionResult<string>>("deleteCompany", cacheData, expiryTime);
+            return cacheData;
         }
     }
 }

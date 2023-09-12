@@ -23,7 +23,7 @@ namespace HRPortal.DataAccessLayer.Repositories {
             _dbSet = context.Set<T>();
             _mapper = mapper;
         }
-        public async Task<ActionResult<string>> Create(TCreate entity) {
+        public async Task<ActionResult<TDto>> Create(TCreate entity) {
             var entityToCreate = _mapper.Map<T>(entity);
             await _dbSet.AddAsync(entityToCreate);
             return new OkObjectResult(entityToCreate);

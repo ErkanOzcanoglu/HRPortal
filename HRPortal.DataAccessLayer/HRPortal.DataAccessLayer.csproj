@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HRPortal.Entities\HRPortal.Entities.csproj" />
+    <ProjectReference Include="..\HRPortal.Services\HRPortal.Services.csproj" />
   </ItemGroup>
 
 </Project>

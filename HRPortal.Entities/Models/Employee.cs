@@ -23,8 +23,6 @@ namespace HRPortal.Entities.Models {
         public DateTime? PasswordResetTokenExpiresAt { get; set; }
 
         // Relationships
-        public Guid? CompanyId { get; set; }
-        public Company? Company { get; set; }
 
         public EmployeeCompanyInformation EmployeeCompanyInformation { get; set; }
 

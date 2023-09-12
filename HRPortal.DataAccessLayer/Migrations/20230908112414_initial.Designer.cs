@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRPortal.DataAccessLayer.Migrations
 {
     [DbContext(typeof(HRPortalContext))]
-    [Migration("20230906133738_initial")]
+    [Migration("20230908112414_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -543,11 +543,9 @@ namespace HRPortal.DataAccessLayer.Migrations
 
             modelBuilder.Entity("HRPortal.Entities.Models.Employee", b =>
                 {
-                    b.HasOne("HRPortal.Entities.Models.Company", "Company")
+                    b.HasOne("HRPortal.Entities.Models.Company", null)
                         .WithMany("Users")
                         .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("HRPortal.Entities.Models.EmployeeCompanyInformation", b =>

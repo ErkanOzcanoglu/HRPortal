@@ -8,11 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.10" />
     <PackageReference Include="MimeKit" Version="4.1.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HRPortal.DataAccessLayer\HRPortal.DataAccessLayer.csproj" />
     <ProjectReference Include="..\HRPortal.Entities\HRPortal.Entities.csproj" />
   </ItemGroup>
 

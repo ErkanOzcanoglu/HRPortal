@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using HRPortal.Entities.Models;
+﻿using HRPortal.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HRPortal.Entities.Dto.InComing.UserForAuth {
-    public class RegisterDto : BaseModel {
+    public class AddEmployeeDto : BaseModel {
         public string TC { get; set; }
         public string Phone { get; set; }
         public string Name { get; set; }
@@ -20,6 +19,5 @@ namespace HRPortal.Entities.Dto.InComing.UserForAuth {
         public string Password { get; set; }
         [Required, Compare("Password")]
         public string ConfirmPassword { get; set; }
-        public bool IsAdmin { get; set; }
     }
 }

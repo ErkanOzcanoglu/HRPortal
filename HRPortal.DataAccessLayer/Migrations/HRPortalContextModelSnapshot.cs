@@ -540,11 +540,9 @@ namespace HRPortal.DataAccessLayer.Migrations
 
             modelBuilder.Entity("HRPortal.Entities.Models.Employee", b =>
                 {
-                    b.HasOne("HRPortal.Entities.Models.Company", "Company")
+                    b.HasOne("HRPortal.Entities.Models.Company", null)
                         .WithMany("Users")
                         .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("HRPortal.Entities.Models.EmployeeCompanyInformation", b =>

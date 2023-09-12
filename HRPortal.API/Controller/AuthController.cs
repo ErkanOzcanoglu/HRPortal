@@ -1,4 +1,5 @@
-﻿using HRPortal.DataAccessLayer.Context;
+﻿using AutoMapper;
+using HRPortal.DataAccessLayer.Context;
 using HRPortal.DataAccessLayer.Repositories;
 using HRPortal.Entities.Dto.InComing.UserForAuth;
 using HRPortal.Entities.Dto.OutComing;
@@ -21,16 +22,18 @@ namespace HRPortal.API.Controllers {
         private readonly HRPortalContext _context;
         private readonly DbSet<Employee> _dbSet;
         private readonly IEmailService _emailService;
+        private readonly IMapper _mapper;
 
-        public AuthController(HRPortalContext context, IEmailService emailService) {
+        public AuthController(HRPortalContext context, IEmailService emailService, IMapper mapper) {
             _context = context;
             _dbSet = _context.Set<Employee>();
             _emailService = emailService;
+            _mapper = mapper;
         }
 
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(RegisterDto userForRegisterDto) {
+        public async Task<ActionResult<RegisterDto>> Register(RegisterDto userForRegisterDto) {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
 
@@ -40,6 +43,31 @@ namespace HRPortal.API.Controllers {
                 Mail = userForRegisterDto.Email,
                 Phone = userForRegisterDto.Phone,
                 TC = userForRegisterDto.TC,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                VerificationToken = CreateRandomToken()
+            };
+
+            await _dbSet.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            var userDto = _mapper.Map<EmployeeDto>(user);
+
+            // return token
+            return Ok(user);
+        }
+
+        [HttpPost("add/employee")]
+        public async Task<ActionResult<string>> AddEmployee(AddEmployeeDto employeeDto) {
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(employeeDto.Password, out passwordHash, out passwordSalt);
+
+            var user = new Employee {
+                Name = employeeDto.Name,
+                Surname = employeeDto.Surname,
+                Mail = employeeDto.Email,
+                Phone = employeeDto.Phone,
+                TC = employeeDto.TC,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 VerificationToken = CreateRandomToken()

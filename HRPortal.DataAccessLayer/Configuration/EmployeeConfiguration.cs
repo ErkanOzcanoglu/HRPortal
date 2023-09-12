@@ -16,13 +16,22 @@ using System.Threading.Tasks;
 namespace HRPortal.DataAccessLayer.Configuration {
     public class EmployeeConfiguration : Profile {
         public EmployeeConfiguration() {
+            CreateMap<AddEmployeeDto, Employee>()
+                .ForMember(u => u.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(u => u.Status, opt => opt.MapFrom(src => 1))
+                .ForMember(u => u.IsAdmin, opt => opt.MapFrom(src => false))
+                .ForMember(u => u.CreatedTime, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(u => u.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(u => u.Surname, opt => opt.MapFrom(src => src.Surname))
+                .ForMember(u => u.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(u => u.TC, opt => opt.MapFrom(src => src.TC));
+
             CreateMap<CreationDtoForEmployee, Employee>()
                 .ForMember(u => u.IsAdmin, opt => opt.MapFrom(src => false))
                 .ForMember(u => u.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
 
             CreateMap<CreationDtoForUser, Employee>()
-                .ForMember(u => u.IsAdmin, opt => opt.MapFrom(src => true))
-                .ForMember(u => u.CompanyId, opt => opt.MapFrom(src => src.CompanyId));
+                .ForMember(u => u.IsAdmin, opt => opt.MapFrom(src => true));
 
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(u => u.Name, opt => opt.MapFrom(src => src.Name))
@@ -34,8 +43,7 @@ namespace HRPortal.DataAccessLayer.Configuration {
                 .ForMember(u => u.Mail, opt => opt.MapFrom(src => src.Mail))
                 .ForMember(u => u.Id, opt => opt.MapFrom(src => src.Id));
 
-            CreateMap<UpdateDtoForEmployee, Employee>()
-                .ForMember(u => u.CompanyId, opt => opt.MapFrom(src => src.CompanyId));
+            
 
                 //.ForMember(u => u.Name, opt => opt.MapFrom(src => src.Name))
                 //.ForMember(u => u.Surname, opt => opt.MapFrom(src => src.Surname))
@@ -61,7 +69,6 @@ namespace HRPortal.DataAccessLayer.Configuration {
 
         public void Configure(EntityTypeBuilder<Employee> builder) {
             builder.HasKey(b => b.Id);
-            builder.HasOne(b => b.Company).WithMany(b => b.Users).HasForeignKey(b => b.CompanyId);
 
             builder.Property(b => b.Name).IsRequired(false);
             builder.Property(b => b.Surname).IsRequired(false);

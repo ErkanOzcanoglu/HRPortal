@@ -6,69 +6,90 @@ using HRPortal.Entities.Dto.InComing.UpdateDto;
 using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.IUnitOfWorks;
 using HRPortal.Entities.Models;
+using HRPortal.Services.CacheServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
 namespace HRPortal.API.Controller {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : GenericController<Employee, EmployeeDto, CreationDtoForEmployee, UpdateDtoForEmployee> {
-
-        /// <summary>
-        /// The context
-        /// </summary>
+    public class EmployeeController : ControllerBase {
         private readonly HRPortalContext _context;
-
-        /// <summary>
-        /// The unit of work
-        /// </summary>
         private readonly IUnitOfWork<Employee, EmployeeDto, CreationDtoForEmployee, UpdateDtoForEmployee> _unitOfWork;
-
-        /// <summary>
-        /// The mapper
-        /// </summary>
         private readonly IMapper _mapper;
-
-        /// <summary>
-        /// The database set
-        /// </summary>
         private readonly DbSet<Employee> _dbSet;
+        private readonly ICacheService _cacheService;
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompanyController"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="mapper">The mapper.</param>
-        public EmployeeController(HRPortalContext context, IMapper mapper) : base(context, mapper) {
+        public EmployeeController(HRPortalContext context, IMapper mapper, ICacheService cacheService) {
             _context = context;
             _mapper = mapper;
             _dbSet = context.Set<Employee>();
+            _cacheService = cacheService;
             _unitOfWork = new UnitOfWork<Employee, EmployeeDto, CreationDtoForEmployee, UpdateDtoForEmployee>(_context, mapper);
         }
 
-        [HttpPost("EmployeeCreate")]
-        public async Task<ActionResult<string>> Create(CreationDtoForEmployee entity) {
-            var employeeMail = _dbSet.FirstOrDefault(x => x.Mail == entity.Mail);
-            if (employeeMail != null) {
-                return Ok("There is already a user with the same mail");
+        [HttpGet("employees")]
+        public async Task<IEnumerable<EmployeeDto>> GetAllAsync() {
+            //return await _unitOfWork.Repository.GetAllAsync();
+            var cacheData = _cacheService.GetData<IEnumerable<EmployeeDto>>("employees");
+            if (cacheData != null && cacheData.Count() > 0) {
+                return cacheData;
             }
+            cacheData = await _unitOfWork.Repository.GetAllAsync();
 
-            var companyPhone = _dbSet.FirstOrDefault(x => x.Phone == entity.Phone);
-            if (companyPhone != null) {
-                return Ok("There is already a company with the same phone");
-            }
-
-            await _unitOfWork.Repository.Create(entity);
-            _unitOfWork.SaveChanges();
-            return Ok("Creation Complete");
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<IEnumerable<EmployeeDto>>("employees", cacheData, expiryTime);
+            return cacheData;
         }
 
+        [HttpGet("employee/{id}")]
+        public async Task<Employee> GetAsync(Guid id) {
+            var cacheData = _cacheService.GetData<Employee>("employee");
+            if (cacheData != null) {
+                return cacheData;
+            }
 
-        //[HttpGet("Employee/{id}")]
-        //public async Task<IEnumerable<EmployeeDto>> GetManyAsync(Guid id) { 
-        //    return await _unitOfWork.Repository.GetManyAsync(id);
-        //}
+            cacheData = await _unitOfWork.Repository.GetAsync(id);
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<Employee>("employee", cacheData, expiryTime);
+            return cacheData;
+        }
+
+        [HttpPost("employee")]
+        public async Task<IActionResult> CreateAsync(CreationDtoForEmployee creationDto) {
+            try {
+                await _unitOfWork.Repository.Create(creationDto);
+                _unitOfWork.SaveChanges();
+                return Ok("Creation Complete");
+            } catch (Exception ex) {
+                return Ok("Creation Incomplete");
+            }
+        }
+
+        [HttpPut("employee/{id}")]
+        public async Task<ActionResult<string>> Update(Guid id, UpdateDtoForEmployee updateDtoForEmployee) {
+            var cacheData = _cacheService.GetData<ActionResult<string>>("updateEmployee");
+            if (cacheData != null) {
+                return cacheData;
+            }
+            cacheData = await _unitOfWork.Repository.Update(id, updateDtoForEmployee);
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<ActionResult<string>>("updateEmployee", cacheData, expiryTime);
+            return cacheData;
+        }
+
+        [HttpDelete("employee/{id}")]
+        public async Task<ActionResult<string>> Delete(Guid id) {
+            var cacheData = _cacheService.GetData<ActionResult<string>>("deleteEmployee");
+            if (cacheData != null) {
+                return cacheData;
+            }
+            cacheData = await _unitOfWork.Repository.Delete(id);
+            var expiryTime = DateTime.Now.AddSeconds(30);
+            _cacheService.SetData<ActionResult<string>>("deleteEmployee", cacheData, expiryTime);
+            return cacheData;
+        }
     }
 }
