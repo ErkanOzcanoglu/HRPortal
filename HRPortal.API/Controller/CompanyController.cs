@@ -94,5 +94,12 @@ namespace HRPortal.API.Controller
             _cacheService.SetData<ActionResult<string>>("deleteCompany", cacheData, expiryTime);
             return cacheData;
         }
+
+        [HttpPut("premiumUpdate/{id}")]
+        public async Task<IActionResult> PremiumUpdate(Guid id) {
+            _dbSet.Where(x => x.Id == id).FirstOrDefault().IsPremium = true;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

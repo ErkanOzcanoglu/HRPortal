@@ -48,6 +48,13 @@ namespace HRPortal.Entities.Dto.InComing.CreationDto
         /// The expiration date.
         /// </value>
         public string ExpirationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the company identifier.
+        /// </summary>
+        /// <value>
+        /// The company identifier.
+        /// </value>
         public Guid CompanyId { get; set; }
     }
 }

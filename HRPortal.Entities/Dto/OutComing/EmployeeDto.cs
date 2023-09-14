@@ -14,5 +14,6 @@ namespace HRPortal.Entities.Dto.OutComing {
         public string TC { get; set; }
         public string Address { get; set; }
         public string DateOfBirth { get; set; }
+        public Boolean IsAdmin { get; set; }
     }
 }

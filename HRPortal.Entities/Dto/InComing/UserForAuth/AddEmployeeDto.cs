@@ -12,6 +12,8 @@ namespace HRPortal.Entities.Dto.InComing.UserForAuth {
         public string Phone { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string Address { get; set; }
+        public string DateOfBirth { get; set; }
 
         [Required, EmailAddress]
         public string Email { get; set; }

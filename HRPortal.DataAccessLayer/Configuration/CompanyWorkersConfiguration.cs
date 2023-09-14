@@ -14,7 +14,9 @@ namespace HRPortal.DataAccessLayer.Configuration {
     public class CompanyWorkersConfiguration : Profile {
         public CompanyWorkersConfiguration() {
             CreateMap<CreationDtoFormCompanyWorkers, CompanyWorkers>()
+                .ForMember(b => b.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(b => b.CompanyId, opt => opt.MapFrom(src => src.CompanyId))
+                .ForMember(b => b.Status, opt => opt.MapFrom(src => 1))
                 .ForMember(b => b.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId));
 
             CreateMap<CompanyWorkers, CompanyWorkersDto>()

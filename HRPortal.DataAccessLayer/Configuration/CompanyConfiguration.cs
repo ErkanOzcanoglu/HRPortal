@@ -39,8 +39,8 @@ namespace HRPortal.DataAccessLayer.Configuration
                 .ForMember(dest => dest.CompanyMail, opt => opt.MapFrom(src => src.CompanyMail))
                 .ForMember(dest => dest.CompanyPhone, opt => opt.MapFrom(src => src.CompanyPhone));
 
-            CreateMap<UpdateCompanyForPurchase, Company>()
-                .ForMember(dest => dest.IsPremium, opt => opt.MapFrom(src => true));
+            CreateMap<Company, UpdateCompanyForPurchase>()
+                .ForMember(dest => dest.IsPremium, opt => opt.MapFrom(src => true)).ReverseMap();
         }
 
         public void Configure(EntityTypeBuilder<Company> builder) {

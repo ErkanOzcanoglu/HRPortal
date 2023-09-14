@@ -12,5 +12,6 @@ namespace HRPortal.Entities.Dto.OutComing {
         public string CompanyPhone { get; set; }
         public string CompanyAddress { get; set; }
         public string Website { get; set; }
+        public Boolean IsPremium { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace HRPortal.Entities.Dto.InComing.UpdateDto
 {
     public class UpdateDtoForEmployee
     {
-        
+     public string IsAdmin { get; set; }   
     }
 }

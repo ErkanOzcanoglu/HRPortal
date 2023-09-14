@@ -42,6 +42,8 @@ namespace HRPortal.API.Controllers {
                 Surname = userForRegisterDto.Surname,
                 Mail = userForRegisterDto.Email,
                 Phone = userForRegisterDto.Phone,
+                Status = 1,
+                IsAdmin = true,
                 TC = userForRegisterDto.TC,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
@@ -58,7 +60,7 @@ namespace HRPortal.API.Controllers {
         }
 
         [HttpPost("add/employee")]
-        public async Task<ActionResult<string>> AddEmployee(AddEmployeeDto employeeDto) {
+        public async Task<ActionResult<Employee>> AddEmployee(AddEmployeeDto employeeDto) {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(employeeDto.Password, out passwordHash, out passwordSalt);
 
@@ -78,7 +80,7 @@ namespace HRPortal.API.Controllers {
 
 
             // return token
-            return Ok(user.Id);
+            return Ok(user);
         }
 
         [HttpPost("login")]

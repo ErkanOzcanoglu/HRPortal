@@ -46,14 +46,14 @@ namespace HRPortal.API.Controller {
 
         [HttpGet("employee/{id}")]
         public async Task<Employee> GetAsync(Guid id) {
-            var cacheData = _cacheService.GetData<Employee>("employee");
-            if (cacheData != null) {
-                return cacheData;
-            }
+            //var cacheData = _cacheService.GetData<Employee>("employee");
+            //if (cacheData != null) {
+            //    return cacheData;
+            //}
 
-            cacheData = await _unitOfWork.Repository.GetAsync(id);
-            var expiryTime = DateTime.Now.AddSeconds(30);
-            _cacheService.SetData<Employee>("employee", cacheData, expiryTime);
+            var cacheData = await _unitOfWork.Repository.GetAsync(id);
+            //var expiryTime = DateTime.Now.AddSeconds(30);
+            //_cacheService.SetData<Employee>("employee", cacheData, expiryTime);
             return cacheData;
         }
 

@@ -110,5 +110,16 @@ namespace HRPortal.API.Controller {
             var dto = _mapper.Map<CompanyWorkersDto>(entity);
             return Ok(dto);
         }
+
+        [HttpGet("getManyEmployeeByCompanyId/{id}")]
+        public async Task<ActionResult<CompanyWorkersDto>> GetManyEmployeeByCompanyId(Guid id) {
+            var entity = await _dbSet.Where(x => x.CompanyId == id).ToListAsync();
+            if (entity == null) {
+                return NotFound();
+            }
+            
+            return Ok(entity);
+        }
+
     }
 }

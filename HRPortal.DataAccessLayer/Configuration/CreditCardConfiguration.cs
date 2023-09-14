@@ -4,11 +4,6 @@ using HRPortal.Entities.Dto.InComing.UpdateDto;
 using HRPortal.Entities.Dto.OutComing;
 using HRPortal.Entities.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HRPortal.DataAccessLayer.Configuration
 {
@@ -22,17 +17,17 @@ namespace HRPortal.DataAccessLayer.Configuration
                 .ForMember(dest => dest.CardHolderName, opt => opt.MapFrom(src => src.CardHolderName))
                 .ForMember(dest => dest.CardType, opt => opt.MapFrom(src => src.CardType))
                 .ForMember(dest => dest.CardSecurityCode, opt => opt.MapFrom(src => src.CardSecurityCode))
-                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.ExpirationDate));
+                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.ExpirationDate)).ReverseMap();
 
             CreateMap<CreditCard, CreditCardDto>()
                 .ForMember(dest => dest.CardNumber, opt => opt.MapFrom(src => src.CardNumber))
                 .ForMember(dest => dest.CardHolderName, opt => opt.MapFrom(src => src.CardHolderName))
                 .ForMember(dest => dest.CardType, opt => opt.MapFrom(src => src.CardType))
                 .ForMember(dest => dest.CardSecurityCode, opt => opt.MapFrom(src => src.CardSecurityCode))
-                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.ExpirationDate));
+                .ForMember(dest => dest.ExpirationDate, opt => opt.MapFrom(src => src.ExpirationDate)).ReverseMap();
 
             CreateMap<UpdateDtoForCreditCard, CreditCard>()
-               .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CompanyId));
+               .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CompanyId)).ReverseMap();
         }
 
         /// <summary>

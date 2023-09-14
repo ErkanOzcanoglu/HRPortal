@@ -92,7 +92,6 @@ namespace HRPortal.API.Controller {
             //return await _unitOfWork.Repository.GetAsync(id);
         }
 
-
         [HttpPut("{id}")]
         public async Task<ActionResult<string>> Update(Guid id, TUpdate entity) {
             var cacheData = _cacheService.GetData<ActionResult<string>>("string");
